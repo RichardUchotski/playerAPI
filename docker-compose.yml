@@ -1,0 +1,36 @@
+services:
+  korfball_db_container:
+    container_name: "korfball_db_container"
+    image: postgres
+    environment:
+      POSTGRES_USER: richard
+      POSTGRES_PASSWORD: "#FuckYourMum2020"
+      PGDATA: /data/postgres
+    volumes:
+      - korfball_db_container:/data/postgres
+    networks:
+      - network
+    restart: unless-stopped
+    ports:
+      - "5200:5432"
+
+  player-api:
+    container_name: player-api
+    image: rsmithuchot1/player-api
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://korfball_db_container/korfball
+    ports:
+      - "8420:8080"
+    depends_on:
+      - korfball_db_container
+    restart: unless-stopped
+
+
+
+
+networks:
+  network:
+    driver: bridge
+
+volumes:
+  korfball_db_container:
