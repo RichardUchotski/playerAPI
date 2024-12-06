@@ -13,6 +13,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 public class PlayerApiApplication {
 
     public static void main(String[] args) {
+        System.out.println("Just adding a line before running the spring boot");
         SpringApplication.run(PlayerApiApplication.class, args);
     }
 
