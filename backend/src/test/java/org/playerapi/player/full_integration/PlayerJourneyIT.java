@@ -62,7 +62,7 @@ public class PlayerJourneyIT {
 
     @Test
     void canGetPlayer(){
-
+        canRegisterPlayer();
     }
 
 
