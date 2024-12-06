@@ -14,6 +14,7 @@ public class PlayerApiApplication {
 
     public static void main(String[] args) {
         System.out.println("Just adding a line before running the spring boot, adding a comment");
+        System.out.println("Just adding a line before running the spring boot, adding a comment");
         SpringApplication.run(PlayerApiApplication.class, args);
     }
 
