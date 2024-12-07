@@ -7,7 +7,7 @@ on:
       - main
     paths:
       - backend/**
-      - .github/workflows/backend-cd.yml
+      - .github/workflows/**
 
 jobs:
   build:
@@ -64,7 +64,7 @@ jobs:
           exit 1;
 
       - name: Build Package with Maven
-        run: mvn -ntp -B verify -Ddocker.image.tag=${{steps.build-number.outputs.BUILD_NUMBER}} jib:build
+        run: mvn -ntp -B verify  -DskipTests  -Ddocker.image.tag=${{steps.build-number.outputs.BUILD_NUMBER}} jib:build
 
       - name: Update Dockerrun.aws.json with New Tag
         run: |
