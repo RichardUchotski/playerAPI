@@ -90,7 +90,7 @@ jobs:
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git remote set-url origin https://x-access-token:${{ secrets.PLAYERAPI_PAT__ACCESSTOKEN_FOR_WORKFLOW_BOT }}@github.com/owner/repository.git
+          git remote set-url origin https://x-access-token:${{ secrets.PLAYERAPI_PAT__ACCESSTOKEN_FOR_WORKFLOW_BOT }}@github.com/RichardUchotski/playerAPI.git
           git add .
           git commit -m "Update Dockerrun.aws.json docker image with new tag ${{ steps.build-number.outputs.BUILD_NUMBER }}"
           git push
