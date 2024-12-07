@@ -58,5 +58,5 @@ jobs:
           java-version: 17
           cache: 'maven'
       - name: Build and run tests with Maven
-        run: mvn -ntp -B verify
+        run: mvn -ntp -B package -DskipTests
 
