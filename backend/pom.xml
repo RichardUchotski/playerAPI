@@ -29,6 +29,7 @@
 
     <properties>
         <java.version>17</java.version>
+        <docker.img.tag/>
     </properties>
 
     <dependencies>
@@ -213,7 +214,7 @@
                         </platforms>
                     </from>
                     <to>
-                        <image>docker.io/rsmithuchot1/${project.artifactId}:${project.version}</image>
+                        <image>docker.io/rsmithuchot1/${project.artifactId}:${project.version}:${docker.img.tag}</image>
                         <tags>
                             <tag>latest</tag>
                         </tags>
