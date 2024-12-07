@@ -1,0 +1,23 @@
+{
+  "AWSEBDockerrunVersion": 2,
+  "containerDefinitions": [
+    {
+      "name" : "player-api",
+      "image" : "rsmithuchot1/player-api:latest",
+      "essential"  : true,
+      "memory" : 512,
+      "portMappings": [
+        {
+          "hostPort": 80,
+          "containerPort" : 8080
+        }
+      ],
+      "environment": [
+        {
+          "name" : "SPRING_DATASOURCE_URL",
+          "value" : "jdbc:postgresql://awseb-e-ttuaue2shg-stack-awsebrdsdatabase-pe4hi0stm6nx.cr4cmu4o6fsx.eu-west-2.rds.amazonaws.com/korfball"
+        }
+      ]
+    }
+  ]
+}

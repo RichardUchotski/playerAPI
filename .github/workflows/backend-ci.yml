@@ -9,6 +9,7 @@ on:
       - main
     paths:
       - backend/**
+      - .github/workflows/*
 
 # defines the tasks or jobs that your workflow will perform
 # an independent task in my workflow
