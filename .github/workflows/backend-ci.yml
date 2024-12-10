@@ -11,6 +11,8 @@ on:
       - backend/**
       - .github/workflows/*
 
+permissions: write-all
+
 # defines the tasks or jobs that your workflow will perform
 # an independent task in my workflow
 jobs:
