@@ -1,0 +1,31 @@
+.footer{
+    position: fixed;
+    background: black;
+    bottom: 0;
+    width: 100%;
+    padding: 1rem;
+    text-align: center;
+    border-top-right-radius: 0.25rem;
+    border-top-left-radius: 0.25rem;
+}
+
+.footer__list{
+    list-style: none;
+    margin: 0.1rem;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.link{
+    color: white;
+    display: inline-block;
+    padding: 0.5rem;
+    text-decoration: none;
+    font-family: "Malgun Gothic", sans-serif;
+}
+
+.link:hover{
+    color: gainsboro;
+}

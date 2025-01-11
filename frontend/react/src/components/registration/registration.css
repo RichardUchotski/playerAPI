@@ -1,0 +1,98 @@
+.main-form-wrapper{
+    padding-top:4rem;
+    padding-bottom: 6rem;
+    max-width: 800px;
+
+}
+
+/*form text*/
+.form-information{
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    text-align: justify;
+}
+
+/*Form Section*/
+.form-container{
+    padding: 0.6rem;
+    border: 2px solid black;
+    margin: 0 auto;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 90%;
+}
+
+.form-item-container{
+    padding: 0.3rem;
+    margin: 0.2rem;
+    display: flex;
+    width: 100%;
+
+}
+
+.form-item-label{
+    flex: 0 0 6.5rem;
+    text-align: right;
+    margin-right: 1rem;
+}
+
+.form-item-input{
+    flex: 1;
+    padding: 0.3rem;
+    margin-right: 2rem;
+    border-radius: 4px;
+    text-align: justify;
+}
+
+.form-item-input.checkbox{
+    max-width: 20px;
+    padding: 0;
+    margin: 0 0.9rem;
+}
+
+.form-item-label.checkbox{
+    display: inline-block;
+    white-space: nowrap;
+    font-size: 0.75rem;
+    vertical-align: middle;
+    text-align: center;
+
+}
+
+.form-item-input[type="submit"]{
+    max-width: 100px;
+    background-color: white;
+    border-radius: 8px;
+    padding: 0.5rem;
+    text-align: center;
+}
+
+.form-item-input[type="submit"]:hover{
+   box-shadow: 1px 1px 1px 1px black;
+}
+
+.form-item-input[type="submit"]:active{
+    max-width: 100px;
+    background-color: black;
+    color: white;
+    border-radius: 8px;
+    padding: 0.5rem;
+    border: 1px solid white;
+}
+
+@media (min-width: 760px) {
+    .main-form-wrapper{
+        padding-top: 7rem;
+        padding-left: 7rem;
+        width: 70%;
+        margin: 0 auto;
+    }
+
+    .form-item-input.checkbox{
+       margin-left: 5rem;
+
+    }
+}

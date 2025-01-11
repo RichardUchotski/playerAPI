@@ -1,8 +1,10 @@
-import LandingHeader from "./LandingHeader.jsx";
-import "./landingCSS.css";
+import Header from "../header/Header.jsx";
+import "../header/header.css";
+import LandingMainContent from "./LandingMainContent.jsx";
+import "./landing.css";
 
 export default function LandingPage() {
-    return <>
-        <LandingHeader />
-    </>
+    return <main className={"main-landing"}>
+        <LandingMainContent />
+    </main>
 }
