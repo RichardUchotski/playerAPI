@@ -19,8 +19,10 @@ export default function Header() {
                         <ul className={"main_header__dropdown-ul"}>
                             <li className={"main_header__dropdown-lItem"}><Link to={"/"}>Home</Link></li>
                             <li className={"main_header__dropdown-lItem"}><Link to={"/"}>What is Korfball?</Link></li>
-                            <li className={"main_header__dropdown-lItem"}><Link to={"/"}>Player Registration</Link></li>
-                            <li className={"main_header__dropdown-lItem"}><Link to={"/"}>Scottish Korfball Team</Link></li>
+                            <li className={"main_header__dropdown-lItem"}><Link to={"/"}>Players</Link></li>
+                            <li className={"main_header__dropdown-lItem"}><Link to={"/players"}>Player Registration</Link></li>
+                            <li className={"main_header__dropdown-lItem"}><Link to={"/"}>Scottish Korfball Team</Link>
+                            </li>
                             <li className={"main_header__dropdown-lItem"}><Link to={"/"}>Clubs</Link></li>
                             <li className={"main_header__dropdown-lItem"}><Link to={"/"}>Tournaments</Link></li>
                         </ul>
@@ -31,10 +33,13 @@ export default function Header() {
                 <ul className={"main_header__ul"}>
                     <li className={"main_header__lItem"}><Link to={"/"}>Home</Link></li>
                     <li className={"main_header__lItem"}><Link to={"/"}>What is Korfball?</Link></li>
-                    <li className={"main_header__lItem"}><Link to={"/player-registration"}>Player Registration</Link></li>
+                    <li className={"main_header__lItem"}><Link to={"/players"}>Players</Link></li>
+                    <li className={"main_header__lItem"}><Link to={"/player-registration"}>Player Registration</Link>
+                    </li>
                     <li className={"main_header__lItem"}><Link to={"/"}>Scottish Korfball Team</Link></li>
                     <li className={"main_header__lItem"}><Link to={"/"}>Clubs</Link></li>
                     <li className={"main_header__lItem"}><Link to={"/"}>Tournaments</Link></li>
+
                 </ul>
             </nav>
         </header>
