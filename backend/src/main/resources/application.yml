@@ -25,3 +25,7 @@ spring:
 server:
   error:
     include-message: always
+
+cors:
+  allowed-origins: "*"
+  allowed-methods: "*"

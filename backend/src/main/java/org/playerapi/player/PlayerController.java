@@ -1,6 +1,7 @@
 package org.playerapi.player;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,7 +34,7 @@ public class PlayerController {
         return playerService.addPlayer(requestObject);
     }
 
-    @PostMapping
+    @PostMapping(value = "/params", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public ResponseEntity<?> addPlayer(@RequestParam Map<String, String> params){
         System.out.println(params);
         return ResponseEntity.ok("Player successfully created");
