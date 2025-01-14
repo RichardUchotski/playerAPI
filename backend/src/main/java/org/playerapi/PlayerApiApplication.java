@@ -13,10 +13,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 public class PlayerApiApplication {
 
     public static void main(String[] args) {
-        System.out.println("Just adding a line before running the spring boot, adding a comment");
-        System.out.println("Just adding a line before running the spring boot, adding a comment");
         SpringApplication.run(PlayerApiApplication.class, args);
-        System.out.println("Seeing if changes in push to aws");
     }
 
     @Bean
