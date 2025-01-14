@@ -86,4 +86,5 @@ jobs:
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_PLAYERAPI }}
         run: |
-          curl -X POST -H 'Content-type: application/json' --data '{"text":"Implementation: Finished the workflow Implementation!"}' $SLACK_WEBHOOK   
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"Implementation: Finished the workflow Implementation!"}' $SLACK_WEBHOOK   || true
+        continue-on-error: true
