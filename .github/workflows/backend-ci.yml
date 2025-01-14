@@ -49,21 +49,42 @@ jobs:
     # this means all run steps in the build job will execute in the ./backend directory
     defaults:
       run:
-        working-directory: backend
+        working-directory: ./backend
 
     steps:
       - name: slack webhook call
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_PLAYERAPI }}
+        working-directory: ${{ github.workspace }}
         run: |
-          curl -X POST -H 'Content-type: application/json' --data '{"text":"Continuous Implementation!"}' $SLACK_WEBHOOK
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"Starting the Continuous Implementation!"}' $SLACK_WEBHOOK
       # checks out the code from the pull request
       - uses: actions/checkout@v3
+
+      - name: slack webhook call
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_PLAYERAPI }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"Checked out the code for the Implementation!"}' $SLACK_WEBHOOK
+
       - uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: 17
           cache: 'maven'
+
+      - name: slack webhook call
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_PLAYERAPI }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"Set up the Java in the workflow environment for continuous Implementation!"}' $SLACK_WEBHOOK   
+
       - name: Build and run tests with Maven
         run: mvn -ntp -B package -DskipTests
+
+      - name: slack webhook call
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_PLAYERAPI }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"text":" Finished the continuous Implementation!"}' $SLACK_WEBHOOK   
 
