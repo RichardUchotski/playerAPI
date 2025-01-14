@@ -1,4 +1,3 @@
-import Header from "../header/Header.jsx";
 import "../header/header.css";
 import LandingMainContent from "./LandingMainContent.jsx";
 import "./landing.css";

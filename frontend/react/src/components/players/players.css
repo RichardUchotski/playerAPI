@@ -1,0 +1,54 @@
+.player-page {
+    padding: 4rem 0 5rem 0; /* Top and bottom spacing for the page */
+}
+
+.player-page__main {
+    display: flex;
+    justify-content: center; /* Center the main content horizontally */
+    max-width: 1200px; /* Set a maximum width for the content */
+    margin: 0 auto; /* Center the content on the page */
+}
+
+.player-page__players-container{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: space-evenly;
+    padding: 1rem;
+}
+
+.player-card {
+    width: 300px; /* Set a fixed width for all cards */
+    height: 150px; /* Set a fixed height for uniformity */
+    border: 1px solid black; /* Border for visibility */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
+    padding: 1rem; /* Space inside the card */
+    display: flex; /* Flexbox for alignment */
+    flex-direction: column; /* Stack text vertically */
+    justify-content: center; /* Center the content vertically */
+    align-items: center; /* Center the content horizontally */
+    background-color: white; /* Ensure a clean background */
+}
+
+.player-card:hover {
+    box-shadow: 2px 2px 2px 2px black;
+}
+
+
+
+
+@media (min-width: 0px ) and (max-width: 1375px) {
+
+    .player-page__main{
+        max-width: 650px;
+    }
+}
+
+@media (min-width: 0px ) and (max-width: 930px) {
+
+    .player-page__main{
+        max-width: 600px;
+    }
+}
+

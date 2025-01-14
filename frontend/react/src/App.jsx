@@ -8,6 +8,7 @@ import SideBar from "./components/sidebar/SideBar.jsx";
 import "./App.css";
 import {useEffect, useState} from "react";
 import Dots from "./assets/dots.svg";
+import PlayerPage from "./components/players/PlayerPage.jsx";
 
 function App() {
 
@@ -33,7 +34,7 @@ function App() {
                     <Routes>
                         <Route path={"/"} element={  <LandingPage />} />
                         <Route path={"/player-registration"} element={ <PlayerRegistrationPage />} />
-                        <Route path={"/player-registration"} element={ <PlayerRegistrationPage />} />
+                        <Route path={"/players"} element={ <PlayerPage />} />
                         <Route path={"/player-registration"} element={ <PlayerRegistrationPage />} />
                         <Route path={"/player-registration"} element={ <PlayerRegistrationPage />} />
                         <Route path={"/player-registration"} element={ <PlayerRegistrationPage />} />
