@@ -50,7 +50,7 @@ jobs:
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_PLAYERAPI }}
         run: |
-          curl -X POST -H 'Content-type: application/json' --data '{"text":"Continuous Deployment!"}' $SLACK_WEBHOOK
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"Deployment: checked out the code!"}' $SLACK_WEBHOOK
 
       - uses: actions/setup-java@v3
         with:
@@ -58,15 +58,33 @@ jobs:
           cache: 'maven'
           distribution: temurin
 
+      - name: slack webhook call
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_PLAYERAPI }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"Deployment: Set up the Java in the environment out the code!"}' $SLACK_WEBHOOK
+
       - name: Log into DockerHub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
 
+      - name: slack webhook call
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_PLAYERAPI }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"Deployment: Logged into docker!"}' $SLACK_WEBHOOK
+
       - name: Generate Random Build Number
         id: build-number
         run: echo "BUILD_NUMBER=$(date '+%d.%m.%Y.%H.%M.%S')" >> $GITHUB_OUTPUT
+
+      - name: slack webhook call
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_PLAYERAPI }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"Deployment: generating the build number!"}' $SLACK_WEBHOOK
 
       - name: Wait for Postgres to be Ready
         run: |
@@ -84,6 +102,12 @@ jobs:
       - name: Build Package with Maven
         run: mvn -ntp -B verify  -DskipTests  -Ddocker.image.tag=${{steps.build-number.outputs.BUILD_NUMBER}} jib:build
 
+      - name: slack webhook call
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_PLAYERAPI }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"Deployment: built the project and run the tests!"}' $SLACK_WEBHOOK
+
       - name: Update Dockerrun.aws.json with New Tag
         run: |
           echo "Before updating tag"
@@ -91,6 +115,14 @@ jobs:
           sed -i -E 's_(rsmithuchot1/player-api:)([^"]*)_\1'${{steps.build-number.outputs.BUILD_NUMBER}}'_' Dockerrun.aws.json
           echo "After updating tag"
           cat Dockerrun.aws.json
+
+      - name: slack webhook call
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_PLAYERAPI }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"Deployment: Created a new build number!"}' $SLACK_WEBHOOK
+          
+              
 
       - name: Deploy to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v22
@@ -104,10 +136,45 @@ jobs:
           region: ${{ secrets.EB_REGION }}
           deployment_package: backend/Dockerrun.aws.json
 
-      - name: Commit and push Dockerrun.aws.json
+      - name: slack webhook call
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_PLAYERAPI }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"Deployment: deployed to elastic bean stalk!"}' $SLACK_WEBHOOK
+        
+
+      - name: creating a branch to push Dockerrun.aws.json changes
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git add .
+          git checkout -b update-dockerrun-${{ steps.build-number.outputs.BUILD_NUMBER }}
+          git add Dockerrun.aws.json
           git commit -m "Update Dockerrun.aws.json docker image with new tag ${{ steps.build-number.outputs.BUILD_NUMBER }}"
-          git push
+          git push origin update-dockerrun-${{ steps.build-number.outputs.BUILD_NUMBER }}
+          
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: update-dockerrun-${{ steps.build-number.outputs.BUILD_NUMBER }}
+          title: "Update Dockerrun.aws.json"
+          body: "This PR updates the Docker image tag in Dockerrun.aws.json to ${{ steps.build-number.outputs.BUILD_NUMBER }}"
+          base: main
+          labels: ["automation"]
+          
+          
+
+#      - name: Commit and push Dockerrun.aws.json
+#        run: |
+#          git config user.name github-actions
+#          git config user.email github-actions@github.com
+#          git add .
+#          git commit -m "Update Dockerrun.aws.json docker image with new tag ${{ steps.build-number.outputs.BUILD_NUMBER }}"
+#          git push
+
+      - name: slack webhook call
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_PLAYERAPI }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"Deployment: adding the new docker run to my git, though a push!"}' $SLACK_WEBHOOK
