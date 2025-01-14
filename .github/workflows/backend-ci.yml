@@ -60,6 +60,8 @@ jobs:
         working-directory: ${{ github.workspace }}
         run: |
           curl -X POST -H 'Content-type: application/json' --data '{"text":"Continuous Integration!"}' $SLACK_WEBHOOK
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"https://github.com/RichardUchotski/playerAPI/commit/${{github.sha}} -- ${{github.event.header_commit.message}}"}' $SLACK_WEBHOOK
+          
 
       # checks out the code from the pull request
       - uses: actions/checkout@v3
