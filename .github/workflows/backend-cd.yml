@@ -165,7 +165,6 @@ jobs:
           merge: true
           merge-method: squash
           
-          
 
 #      - name: Commit and push Dockerrun.aws.json
 #        run: |
