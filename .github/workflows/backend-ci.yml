@@ -86,13 +86,4 @@ jobs:
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_PLAYERAPI }}
         run: |
-          curl -X POST -H 'Content-type: application/json' --data '{"text":"Implementation: Set up the Java in the workflow environment for continuous Implementation!"}' $SLACK_WEBHOOK   
-
-      - name: slack webhook call
-        env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_PLAYERAPI }}
-        run: |
-          curl -X POST -H 'Content-type: application/json' --data '{"text": Implementation: Finished Implementation!"}' $SLACK_WEBHOOK
-
-      - name: Mark CI as successful
-        run: echo "Slack webhook completed, marking as successful"
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"Implementation: Finished the workflow Implementation!"}' $SLACK_WEBHOOK   
