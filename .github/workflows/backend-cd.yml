@@ -31,13 +31,14 @@ jobs:
 
     defaults:
       run:
-        working-directory: backend
+        working-directory: ./backend
 
     steps:
 
       - name: slack webhook call
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_PLAYERAPI }}
+        working-directory: ${{ github.workspace }}
         run: |
           curl -X POST -H 'Content-type: application/json' --data '{"text":"Continuous Deployment!"}' $SLACK_WEBHOOK
           
