@@ -60,11 +60,17 @@ jobs:
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_PLAYERAPI }}
         run: |
-          curl -X POST -H 'Content-type: application/json' --data '{"text":"Logged into docker: Deployment!"}' $SLACK_WEBHOOK
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"Deployment: Logged into docker!"}' $SLACK_WEBHOOK
 
       - name: Generate Random Build Number
         id: build-number
         run: echo "BUILD_NUMBER=$(date '+%d.%m.%Y.%H.%M.%S')" >> $GITHUB_OUTPUT
+
+      - name: slack webhook call
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_PLAYERAPI }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"Deployment: Generated Build number!"}' $SLACK_WEBHOOK
 
       - name: Wait for Postgres to be Ready
         run: |
@@ -82,6 +88,12 @@ jobs:
       - name: Build Package with Maven
         run: mvn -ntp -B verify  -DskipTests  -Ddocker.image.tag=${{steps.build-number.outputs.BUILD_NUMBER}} jib:build
 
+      - name: slack webhook call
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_PLAYERAPI }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"Deployment:Built project passing image tag as build number!"}' $SLACK_WEBHOOK
+
       - name: Update Dockerrun.aws.json with New Tag
         run: |
           echo "Before updating tag"
@@ -89,6 +101,14 @@ jobs:
           sed -i -E 's_(rsmithuchot1/player-api:)([^"]*)_\1'${{steps.build-number.outputs.BUILD_NUMBER}}'_' Dockerrun.aws.json
           echo "After updating tag"
           cat Dockerrun.aws.json
+
+      - name: slack webhook call
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_PLAYERAPI }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"Deployment: updating the docker run with a new tag number!"}' $SLACK_WEBHOOK
+      
+      
 
       - name: Deploy to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v22
@@ -102,6 +122,12 @@ jobs:
           region: ${{ secrets.EB_REGION }}
           deployment_package: backend/Dockerrun.aws.json
 
+      - name: slack webhook call
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_PLAYERAPI }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"Deployment: Deployed to elastic bean stalk!"}' $SLACK_WEBHOOK
+
       - name: Commit and push Dockerrun.aws.json
         run: |
           git config user.name github-actions
@@ -109,3 +135,9 @@ jobs:
           git add .
           git commit -m "Update Dockerrun.aws.json docker image with new tag ${{ steps.build-number.outputs.BUILD_NUMBER }}"
           git push
+
+      - name: slack webhook call
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_PLAYERAPI }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"Deployment: Commited new docker run to main repo!"}' $SLACK_WEBHOOK
