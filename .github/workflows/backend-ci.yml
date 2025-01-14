@@ -52,13 +52,46 @@ jobs:
         working-directory: ./backend
 
     steps:
+      # calling the slack webhook, set up with a private webhook that needs tobe a secret otherwise it kills the web hook
+      - name: slack webhook call
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_PLAYERAPI }}
+        # need to declare the folder as git as there is no folder until the checkout
+        working-directory: ${{ github.workspace }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"Continuous Integration!"}' $SLACK_WEBHOOK
+
       # checks out the code from the pull request
       - uses: actions/checkout@v3
+      - name: slack webhook call
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_PLAYERAPI }}
+        # need to declare the folder as git as there is no folder until the checkout
+        working-directory: ${{ github.workspace }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"Continuous Integration: Checked out code!"}' $SLACK_WEBHOOK
       - uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: 17
           cache: 'maven'
+
+      - name: slack webhook call
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_PLAYERAPI }}
+        # need to declare the folder as git as there is no folder until the checkout
+        working-directory: ${{ github.workspace }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"Continuous Integration: Set up Java!"}' $SLACK_WEBHOOK    
+
       - name: Build and run tests with Maven
         run: mvn -ntp -B package -DskipTests
+
+      - name: slack webhook call
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_PLAYERAPI }}
+        # need to declare the folder as git as there is no folder until the checkout
+        working-directory: ${{ github.workspace }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"Continuous Integration: Run mvn and finished!"}' $SLACK_WEBHOOK    
 
