@@ -8,6 +8,11 @@ on:
     paths:
       - backend/**
       - .github/workflows/**
+  pull_request:
+    branches:
+      - main
+    types:
+      - closed  # This ensures the workflow triggers when a pull request is closed (merged or otherwise).
 
 permissions: write-all
 
