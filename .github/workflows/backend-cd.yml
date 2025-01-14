@@ -143,37 +143,37 @@ jobs:
           curl -X POST -H 'Content-type: application/json' --data '{"text":"Deployment: deployed to elastic bean stalk!"}' $SLACK_WEBHOOK
         
 
-      - name: creating a branch to push Dockerrun.aws.json changes
-        run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git checkout -b update-dockerrun-${{ steps.build-number.outputs.BUILD_NUMBER }}
-          git add Dockerrun.aws.json
-          git commit -m "Update Dockerrun.aws.json docker image with new tag ${{ steps.build-number.outputs.BUILD_NUMBER }}"
-          git push origin update-dockerrun-${{ steps.build-number.outputs.BUILD_NUMBER }}
-          
-
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v5
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          branch: update-dockerrun-${{ steps.build-number.outputs.BUILD_NUMBER }}
-          title: "Update Dockerrun.aws.json"
-          body: "This PR updates the Docker image tag in Dockerrun.aws.json to ${{ steps.build-number.outputs.BUILD_NUMBER }}"
-          base: main
-          labels: ["automation"]
-          merge: true
-          merge-method: squash
-          
-          
-
-#      - name: Commit and push Dockerrun.aws.json
+#      - name: creating a branch to push Dockerrun.aws.json changes
 #        run: |
 #          git config user.name github-actions
 #          git config user.email github-actions@github.com
-#          git add .
+#          git checkout -b update-dockerrun-${{ steps.build-number.outputs.BUILD_NUMBER }}
+#          git add Dockerrun.aws.json
 #          git commit -m "Update Dockerrun.aws.json docker image with new tag ${{ steps.build-number.outputs.BUILD_NUMBER }}"
-#          git push
+#          git push origin update-dockerrun-${{ steps.build-number.outputs.BUILD_NUMBER }}
+#
+#
+#      - name: Create Pull Request
+#        uses: peter-evans/create-pull-request@v5
+#        with:
+#          token: ${{ secrets.GITHUB_TOKEN }}
+#          branch: update-dockerrun-${{ steps.build-number.outputs.BUILD_NUMBER }}
+#          title: "Update Dockerrun.aws.json"
+#          body: "This PR updates the Docker image tag in Dockerrun.aws.json to ${{ steps.build-number.outputs.BUILD_NUMBER }}"
+#          base: main
+#          labels: ["automation"]
+#          merge: true
+#          merge-method: squash
+          
+          
+
+      - name: Commit and push Dockerrun.aws.json
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "Update Dockerrun.aws.json docker image with new tag ${{ steps.build-number.outputs.BUILD_NUMBER }}"
+          git push
 
       - name: slack webhook call
         env:
