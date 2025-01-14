@@ -35,6 +35,12 @@ jobs:
 
     steps:
 
+      - name: slack webhook call
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_PLAYERAPI }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"Continuous Deployment!"}' $SLACK_WEBHOOK
+          
 
       - uses: actions/checkout@v3
 

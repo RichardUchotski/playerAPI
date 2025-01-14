@@ -52,6 +52,11 @@ jobs:
         working-directory: ./backend
 
     steps:
+      - name: slack webhook call
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_PLAYERAPI }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"Continuous Deployment!"}' $SLACK_WEBHOOK
       # checks out the code from the pull request
       - uses: actions/checkout@v3
       - uses: actions/setup-java@v3
