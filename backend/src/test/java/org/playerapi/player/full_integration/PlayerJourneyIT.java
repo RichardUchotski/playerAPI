@@ -30,7 +30,8 @@ public class PlayerJourneyIT {
     @Test
     void canRegisterPlayer(){
         Player playerToRegister = CreatePlayer.make();
-        PlayerRequestObject playerRequestObject = new PlayerRequestObject(playerToRegister.getFirstName(), playerToRegister.getLastName(), playerToRegister.getAge(), playerToRegister.getEmail());
+        PlayerRequestObject playerRequestObject =
+                new PlayerRequestObject(playerToRegister.getFirstName(), playerToRegister.getLastName(), playerToRegister.getAge(), playerToRegister.getDateOfBirth().toString(),playerToRegister.getPhoneNumber(), playerToRegister.getEmail(), playerToRegister.getGender().name(), playerToRegister.getTeam(), "on");
 
         webClient.post().uri(PLAYER_URI).accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON)
                 .body(Mono.just(playerRequestObject), PlayerRequestObject.class).exchange().expectStatus().isOk();

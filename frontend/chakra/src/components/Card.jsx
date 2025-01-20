@@ -13,12 +13,45 @@ import {
     useColorModeValue, Tag,
 } from '@chakra-ui/react'
 
-export default function CardWithImage({id, firstName,lastName,email, age}) {
+export default function CardWithImage({id, firstName,lastName,email, age, phoneNumber, dateOfBirth, gender, team}) {
+
+    let genderForAPICall;
+
+    if(gender === "FEMALE"){
+        genderForAPICall = "women";
+    }else if(gender === "MALE"){
+        genderForAPICall="men";
+    }else{
+        if(Math.random() > 0.5){
+            genderForAPICall="women"
+        }else{
+            genderForAPICall="men";
+        }
+    }
+
+    let genderStrings = gender.split("_")
+
+    if(gender !== "PREFER_NOT_TO_SAY"){
+        for(let i=0; i<genderStrings.length; i++){
+            genderStrings[i] = genderStrings[i].charAt(0) + genderStrings[i].substring(1, genderStrings[i].length).toLowerCase();
+        }
+
+        genderStrings = genderStrings.join(" ");
+    } else {
+        genderStrings = "";
+    }
+
+
+
+
+
+
     return (
         <Center py={6}>
             <Box
                 maxW={'300px'}
                 minW={'300px'}
+                minH={"500px"}
                 w={'full'}
                 bg={useColorModeValue('white', 'gray.800')}
                 boxShadow={'2xl'}
@@ -37,7 +70,7 @@ export default function CardWithImage({id, firstName,lastName,email, age}) {
                     <Avatar
                         size={'xl'}
                         src={
-                            'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&ixid=eyJhcHBfaWQiOjE3Nzg0fQ'
+                            `https://randomuser.me/api/portraits/${genderForAPICall}/${id}.jpg`
                         }
                         css={{
                             border: '2px solid white',
@@ -53,6 +86,10 @@ export default function CardWithImage({id, firstName,lastName,email, age}) {
                         </Heading>
                         <Text color={'gray.500'}>{email}</Text>
                         <Text color={'gray.500'}>{age}</Text>
+                        <Text color={'gray.500'}>{phoneNumber}</Text>
+                        <Text color={'gray.500'}>{genderStrings}</Text>
+                        <Text color={'gray.500'}>{dateOfBirth}</Text>
+                        <Text color={'gray.500'}>{team}</Text>
                     </Stack>
 
                 </Box>

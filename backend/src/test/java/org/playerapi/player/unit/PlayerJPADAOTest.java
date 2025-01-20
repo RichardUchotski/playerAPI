@@ -9,6 +9,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.playerapi.player.Player;
 import org.playerapi.player.PlayerJPARepository;
 import org.playerapi.player.PlayerJPADAO;
+import org.playerapi.utility.CreatePlayer;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,8 +30,8 @@ class PlayerJPADAOTest {
     void getPlayers_returns_all_players() {
         // Arrange
         List<Player> mockPlayers = List.of(
-                new Player(1, "John", "Doe", 25, "john.doe@example.com"),
-                new Player(2, "Jane", "Smith", 30, "jane.smith@example.com")
+                CreatePlayer.make(),
+                CreatePlayer.make()
         );
         when(playerJPARepository.findAll()).thenReturn(mockPlayers);
 
@@ -46,7 +47,7 @@ class PlayerJPADAOTest {
     @Test
     void getPlayer_returns_player_when_found() {
         // Arrange
-        Player mockPlayer = new Player(1, "John", "Doe", 25, "john.doe@example.com");
+        Player mockPlayer = CreatePlayer.make();
         when(playerJPARepository.findById(1)).thenReturn(Optional.of(mockPlayer));
 
         // Act
@@ -74,7 +75,7 @@ class PlayerJPADAOTest {
     @Test
     void addPlayer_saves_and_returns_player() {
         // Arrange
-        Player mockPlayer = new Player(1, "John", "Doe", 25, "john.doe@example.com");
+        Player mockPlayer = CreatePlayer.make();
 
         // Act
         Player result = playerJPADAO.addPlayer(mockPlayer);
@@ -87,7 +88,7 @@ class PlayerJPADAOTest {
     @Test
     void updatePlayer_saves_updated_player() {
         // Arrange
-        Player mockPlayer = new Player(1, "John", "Doe", 30, "john.doe@example.com");
+        Player mockPlayer = CreatePlayer.make();
 
         // Act
         playerJPADAO.updatePlayer(mockPlayer);
@@ -99,7 +100,7 @@ class PlayerJPADAOTest {
     @Test
     void deletePlayer_deletes_existing_player() {
         // Arrange
-        Player mockPlayer = new Player(1, "John", "Doe", 25, "john.doe@example.com");
+        Player mockPlayer = CreatePlayer.make();
         when(playerJPARepository.findById(1)).thenReturn(Optional.of(mockPlayer));
 
         // Act

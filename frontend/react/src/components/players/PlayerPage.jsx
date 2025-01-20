@@ -2,11 +2,14 @@ import axios from "axios";
 import {useEffect, useState} from "react";
 import PlayerCard from "./PlayerCard.jsx";
 import "./players.css";
+import {getRandomUserData} from "../../data/apiCalls.js";
 
 export default function PlayerPage(){
 
     const [players, setPlayers] = useState([]);
     const [error, setError] = useState(null);
+
+    const randomUSer = getRandomUserData();
 
 
     async function getPlayers(){

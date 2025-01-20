@@ -13,6 +13,7 @@ import org.playerapi.player.PlayerRequestObject;
 
 import jakarta.persistence.EntityManager;
 import org.playerapi.player.PlayerService;
+import org.playerapi.utility.CreatePlayer;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,8 +36,8 @@ class PlayerServiceTest {
     @Test
     void getPlayers_returns_all_players() {
         List<Player> mockPlayers = List.of(
-                new Player("John", "Doe", 25, "john.doe@example.com"),
-                new Player("Jane", "Smith", 30, "jane.smith@example.com")
+                CreatePlayer.make(),
+                CreatePlayer.make()
         );
 
         when(playerDAO.getPlayers()).thenReturn(mockPlayers);
@@ -49,7 +50,7 @@ class PlayerServiceTest {
 
     @Test
     void getPlayer_returns_player_successfully() {
-        Player mockPlayer = new Player(1, "John", "Doe", 25, "john.doe@example.com");
+        Player mockPlayer =  CreatePlayer.make();
 
         when(playerDAO.getPlayer(1)).thenReturn(Optional.of(mockPlayer));
 
@@ -71,8 +72,20 @@ class PlayerServiceTest {
 
     @Test
     void addPlayer_successfully_creates_new_player() {
-        PlayerRequestObject request = new PlayerRequestObject("John", "Doe", 25, "john.doe@example.com");
-        Player newPlayer = new Player("John", "Doe", 25, "john.doe@example.com");
+        Player newPlayer = CreatePlayer.make();
+
+        PlayerRequestObject request = new PlayerRequestObject(
+            newPlayer.getFirstName(),
+            newPlayer.getLastName(),
+            newPlayer.getAge(),
+            newPlayer.getDateOfBirth().toString(),
+            newPlayer.getPhoneNumber(),
+            newPlayer.getEmail(),
+            newPlayer.getGender().name(),
+            newPlayer.getTeam(),
+            "on"
+        );
+
 
         when(playerDAO.existsPlayerByEmail(request.email())).thenReturn(false);
 
@@ -84,19 +97,42 @@ class PlayerServiceTest {
 
     @Test
     void addPlayer_throws_exception_when_email_already_exists() {
-        PlayerRequestObject request = new PlayerRequestObject("John", "Doe", 25, "john.doe@example.com");
+        Player newPlayer = CreatePlayer.make();
+
+        PlayerRequestObject request = new PlayerRequestObject(
+                newPlayer.getFirstName(),
+                newPlayer.getLastName(),
+                newPlayer.getAge(),
+                newPlayer.getDateOfBirth().toString(),
+                newPlayer.getPhoneNumber(),
+                newPlayer.getEmail(),
+                newPlayer.getGender().name(),
+                newPlayer.getTeam(),
+                "on"
+        );
 
         when(playerDAO.existsPlayerByEmail(request.email())).thenReturn(true);
 
         Exception exception = assertThrows(PlayerAlreadyExistsByEmailException.class, () -> playerService.addPlayer(request));
 
-        assertEquals("Player with email john.doe@example.com already exists", exception.getMessage());
+        assertEquals("Player with email "+newPlayer.getEmail()+" already exists", exception.getMessage());
         verify(playerDAO, never()).addPlayer(any());
     }
 
     @Test
     void addPlayer_throws_exception_when_name_is_invalid() {
-        PlayerRequestObject request = new PlayerRequestObject("", "Doe", 25, "john.doe@example.com");
+        Player newPlayer = CreatePlayer.make();
+        PlayerRequestObject request = new PlayerRequestObject(
+                "",
+                newPlayer.getLastName(),
+                newPlayer.getAge(),
+                newPlayer.getDateOfBirth().toString(),
+                newPlayer.getPhoneNumber(),
+                newPlayer.getEmail(),
+                newPlayer.getGender().name(),
+                newPlayer.getTeam(),
+                "on"
+        );
 
         Exception exception = assertThrows(RequestPropertyIsNotValid.class, () -> playerService.addPlayer(request));
 
@@ -105,9 +141,23 @@ class PlayerServiceTest {
 
     @Test
     void updatePlayer_successfully_updates_existing_player() {
+
         int id = 1;
-        Player existingPlayer = new Player(id, "John", "Doe", 25, "john.doe@example.com");
-        PlayerRequestObject updateRequest = new PlayerRequestObject("John", "Doe", 30, "john.doe@example.com");
+        Player existingPlayer = CreatePlayer.make();
+        existingPlayer.setId(id);
+        existingPlayer.setAge(25);
+
+        PlayerRequestObject updateRequest = new PlayerRequestObject(
+                existingPlayer.getFirstName(),
+                existingPlayer.getLastName(),
+                30,
+                existingPlayer.getDateOfBirth().toString(),
+                existingPlayer.getPhoneNumber(),
+                existingPlayer.getEmail(),
+                existingPlayer.getGender().name(),
+                existingPlayer.getTeam(),
+                "on"
+        );
 
         when(playerDAO.getPlayer(id)).thenReturn(Optional.of(existingPlayer));
 
@@ -120,8 +170,20 @@ class PlayerServiceTest {
     @Test
     void updatePlayer_throws_exception_when_no_changes_made() {
         int id = 1;
-        Player existingPlayer = new Player(id, "John", "Doe", 25, "john.doe@example.com");
-        PlayerRequestObject updateRequest = new PlayerRequestObject("John", "Doe", 25, "john.doe@example.com");
+        Player existingPlayer = CreatePlayer.make();
+        existingPlayer.setId(id);
+
+        PlayerRequestObject updateRequest = new PlayerRequestObject(
+                existingPlayer.getFirstName(),
+                existingPlayer.getLastName(),
+                existingPlayer.getAge(),
+                existingPlayer.getDateOfBirth().toString(),
+                existingPlayer.getPhoneNumber(),
+                existingPlayer.getEmail(),
+                existingPlayer.getGender().name(),
+                existingPlayer.getTeam(),
+                "on"
+        );
 
         when(playerDAO.getPlayer(id)).thenReturn(Optional.of(existingPlayer));
 
@@ -134,7 +196,8 @@ class PlayerServiceTest {
     @Test
     void deletePlayer_successfully_deletes_player() {
         int id = 1;
-        Player existingPlayer = new Player(id, "John", "Doe", 25, "john.doe@example.com");
+        Player existingPlayer = CreatePlayer.make();
+        existingPlayer.setId(id);
 
         when(playerDAO.getPlayer(id)).thenReturn(Optional.of(existingPlayer));
 
