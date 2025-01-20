@@ -14,16 +14,20 @@ export default function PlayerRegistrationPage(){
         event.preventDefault();
         const formData = new FormData(event.target);
         const formObject = Object.fromEntries(formData);
+        console.log("This is the form object: " + formObject)
         console.log(formObject)
+        console.log(JSON.stringify(formObject))
+
 
         try{
-            const response = await fetch("http://localhost:8420/api/v1/players", {
+            const response = await fetch("http://localhost:8090/api/v1/players", {
                 method: "POST",
                 headers: {"Content-type" : "application/json"},
                 body: JSON.stringify(formObject),
             });
 
             if(response.ok){
+                console.log(response.data)
                 console.log("Player successfully registered!");
             }else{
                 const error = await response.text();
@@ -61,12 +65,12 @@ export default function PlayerRegistrationPage(){
                             <FormItem inputType={"text"} placeholder={"Enter first name"} id={"firstName"}>First Name: </FormItem>
                             <FormItem inputType={"text"} placeholder={"Enter last name"} id={"lastName"}>Last Name: </FormItem>
                             <FormItem inputType={"number"} placeholder={"Enter age"}  id={"age"}>Age :</FormItem>
-                            <FormItem inputType={"date"} placeholder={""} id={"dob"}>Date of Birth: </FormItem>
-                            <FormItem inputType={"tel"} placeholder={"Enter phone number"} id={"phone"}>Phone :</FormItem>
+                            <FormItem inputType={"date"} placeholder={""} id={"dateOfBirth"}>Date of Birth: </FormItem>
+                            <FormItem inputType={"tel"} placeholder={"Enter phone number"} id={"phoneNumber"}>Phone :</FormItem>
                             <FormItem inputType={"email"} placeholder={"Enter email"} id={"email"}>Email :</FormItem>
                             <FormItem inputType={"select-gender"} placeholder={""} id={"gender"}>Gender: </FormItem>
                             <FormItem inputType={"select-team"} placeholder={""} teams={Teams} id={"team"}>Team: </FormItem>
-                            <FormItem inputType={"checkbox"} placeholder={""} id={"terms"}>I agree to the terms and conditions of
+                            <FormItem inputType={"checkbox"} placeholder={""} id={"termsAccepted"}>I agree to the terms and conditions of
                                 scottish korfball</FormItem>
                             <FormItem inputType={"submit"}/>
                         </form>

@@ -7,3 +7,11 @@ export const getCustomers = async () => {
         throw e;
     }
 }
+
+export const getGenderPicture = async (gender, id) => {
+    try {
+        return await axios.get(`https://randomuser.me/api/portrains/${gender}/${id}.jpg`)
+    } catch(e){
+        throw e;
+    }
+}

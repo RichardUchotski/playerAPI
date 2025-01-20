@@ -20,7 +20,7 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://korfball_db_container:5432/korfball
     ports:
-      - "8420:8080"
+      - "8090:8080"
     networks:
       - network
     depends_on:

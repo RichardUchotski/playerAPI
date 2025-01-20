@@ -8,12 +8,10 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.playerapi.exceptions.NoPlayersInDatabaseException;
 import org.playerapi.exceptions.PlayerByIdNotInDatabaseException;
-import org.playerapi.player.Player;
-import org.playerapi.player.PlayerController;
-import org.playerapi.player.PlayerRequestObject;
-import org.playerapi.player.PlayerService;
+import org.playerapi.player.*;
 import org.playerapi.utility.CreatePlayer;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -76,10 +74,17 @@ class PlayerControllerTest {
         String firstName = "First";
         String lastName = "Last";
         int age = 28;
+        String dob = "2010-01-01";
+        String phone = "07982305251";
         String email = "e@e.com";
+        Gender gender = Gender.valueOf("MALE");
+        String team = "Glasgow Korfball Club";
+        String termsAccepted = "on";
 
-        PlayerRequestObject mockPlayerRequestObject = new PlayerRequestObject(firstName, lastName, age, email);
-        Player mockPlayer = new Player(firstName, lastName, age, email);
+
+
+        PlayerRequestObject mockPlayerRequestObject = new PlayerRequestObject(firstName, lastName, age, dob, phone, email,gender.toString(),team,termsAccepted);
+        Player mockPlayer = new Player(firstName, lastName, age, LocalDate.parse(dob), phone, email,gender,team,true);
 
         when(playerService.addPlayer(mockPlayerRequestObject)).thenReturn(mockPlayer);
 
@@ -93,10 +98,17 @@ class PlayerControllerTest {
         String firstName = "First";
         String lastName = "Last";
         int age = 28;
+        String dob = "2010-01-01";
+        String phone = "07982305251";
         String email = "e@e.com";
+        Gender gender = Gender.valueOf("MALE");
+        String team = "Glasgow Korfball Club";
+        String termsAccepted = "on";
 
-        PlayerRequestObject mockPlayerRequestObject = new PlayerRequestObject(firstName, lastName, age, email);
-        Player mockPlayer = new Player(id, firstName, lastName, age, email);
+
+
+        PlayerRequestObject mockPlayerRequestObject = new PlayerRequestObject(firstName, lastName, age, dob, phone, email,gender.toString(),team,termsAccepted);
+        Player mockPlayer = new Player(id,firstName, lastName, age, LocalDate.parse(dob), phone, email,gender,team,true);
 
         when(playerService.updatePlayer(mockPlayerRequestObject, id)).thenReturn(mockPlayer);
 

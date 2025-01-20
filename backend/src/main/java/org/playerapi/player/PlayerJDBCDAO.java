@@ -6,6 +6,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.util.List;
 import java.util.Objects;
@@ -37,7 +38,7 @@ public class PlayerJDBCDAO implements PlayerDAO {
 
     @Override
     public Player addPlayer(Player player) {
-        String sql = "INSERT INTO player(first_name, last_name, age, email) VALUES(?,?,?,?)";
+        String sql ="INSERT into player(first_name,last_name,age,date_of_birth,phone_number,email,gender,team,terms_accepted) values(?,?,?,?,?,?,?,?,?)";
 
         // Create a KeyHolder to store the generated ID
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -48,7 +49,12 @@ public class PlayerJDBCDAO implements PlayerDAO {
             ps.setString(1, player.getFirstName());
             ps.setString(2, player.getLastName());
             ps.setInt(3, player.getAge());
-            ps.setString(4, player.getEmail());
+            ps.setDate(4, Date.valueOf(player.getDateOfBirth()));
+            ps.setString(5, player.getPhoneNumber());
+            ps.setString(6, player.getEmail());
+            ps.setString(7, player.getGender().toString());
+            ps.setString(8, player.getTeam());
+            ps.setBoolean(9, player.isTermsAccept());
             return ps;
         }, keyHolder);
 
@@ -64,8 +70,8 @@ public class PlayerJDBCDAO implements PlayerDAO {
     @Override
     public void updatePlayer(Player player) {
         int id = player.getId();
-        var sql = "UPDATE player SET first_name = ?, last_name = ?, age = ?, email = ? WHERE id = ?";
-        jdbcTemplate.update(sql, player.getFirstName(), player.getLastName(), player.getAge(), player.getEmail(), id);
+        var sql = "UPDATE player SET first_name = ?, last_name = ?, age = ?, date_of_birth= ?, phone_number = ?,  email = ?, gender = ?, team = ?, terms_accepted = ? WHERE id = ?";
+        jdbcTemplate.update(sql, player.getFirstName(), player.getLastName(), player.getAge(), player.getDateOfBirth(), player.getPhoneNumber(), player.getEmail(), player.getGender().toString(), player.getTeam(), player.isTermsAccept(), id);
     }
 
 

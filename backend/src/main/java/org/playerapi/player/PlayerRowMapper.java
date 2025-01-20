@@ -16,7 +16,12 @@ public class PlayerRowMapper implements RowMapper<Player> {
                 rs.getString("first_name"),
                 rs.getString("last_name"),
                 rs.getInt("age"),
-                rs.getString("email")
+                rs.getDate("date_of_birth").toLocalDate(),
+                rs.getString("phone_number"),
+                rs.getString("email"),
+                Gender.valueOf(rs.getString("gender")),
+                rs.getString("team"),
+                rs.getBoolean("terms_accepted")
         );
     }
 }
