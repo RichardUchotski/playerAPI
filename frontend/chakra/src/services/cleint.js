@@ -15,3 +15,36 @@ export const getGenderPicture = async (gender, id) => {
         throw e;
     }
 }
+
+export const saveCustomer = async (playerData) => {
+    try {
+        return await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/v1/players`, playerData)
+    } catch (e){
+        throw e;
+    }
+}
+
+export const deleteAllCustomers = async () => {
+    try {
+        return await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/api/v1/players`)
+    } catch (e){
+        throw e;
+    }
+}
+
+export const deletePlayerById = async (id) => {
+    try {
+        return await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/api/v1/players/${id}`)
+    } catch (e){
+        throw e;
+    }
+}
+
+
+export const updateCustomer = async (id, playerData) => {
+    try {
+        return await axios.put(`${import.meta.env.VITE_API_BASE_URL}/api/v1/players/${id}`, playerData)
+    }catch (e){
+        throw e;
+    }
+}
