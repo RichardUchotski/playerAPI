@@ -9,7 +9,7 @@ public record PlayerRequestObject(
         String email,
         String gender,
         String team,
-        String termsAccepted
+        boolean termsAccepted
 ) {
     @Override
     public String toString() {

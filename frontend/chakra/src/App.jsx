@@ -1,24 +1,34 @@
-import {Button, ButtonGroup, Spinner, Text, Wrap, WrapItem} from '@chakra-ui/react'
+import {Spinner, Stack, Text, Wrap, WrapItem} from '@chakra-ui/react'
 import SidebarWithHeader from "./components/shared/SideBar.jsx";
 import {useEffect, useState} from "react";
 import {getCustomers} from "./services/cleint.js";
 import CardWithImage from "./components/Card.jsx";
+import DrawerForm from "./components/DrawerForm.jsx";
+import {errorNotification} from "./services/notification.js";
 
 function App() {
 
     const [players,setPlayers] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [err, setError] = useState("");
 
-    useEffect(() => {
+    const fetchPlayers = () => {
         setLoading(true);
         setTimeout(() => getCustomers().then(res => {
             console.log(res);
             setPlayers(res.data);
 
-        }).catch(error =>
-            console.log(error)).finally(
+        }).catch(error => {
+                console.log(error)
+                setError(error.response.data.message);
+                errorNotification(error.code, error.response.data.message);
+        }
+        ).finally(
             () => setLoading(false)), 0)
+    }
 
+    useEffect(() => {
+        fetchPlayers();
     }, []);
 
 
@@ -33,18 +43,31 @@ function App() {
         </SidebarWithHeader>
     }
 
+    if(err){
+        return <Stack>
+            <Text>Opps there was an error</Text>
+            <DrawerForm isApp={true} fetchPlayers={fetchPlayers} />
+        </Stack>
+    }
+
+
     if(players.length <=0){
         return <SidebarWithHeader>
-            <Text>No customers available</Text>
+            <Stack>
+                <Text>No customers available</Text>
+                <DrawerForm isApp={true} fetchPlayers={fetchPlayers} />
+            </Stack>
+
         </SidebarWithHeader>
     }
 
   return (
      <SidebarWithHeader>
+         <DrawerForm isApp={false} fetchPlayers={fetchPlayers}/>
          <Wrap spacing={"1rem"} justify={"center"}>
             {players.map((player,index)=> (
                 <WrapItem key={index}>
-                    <CardWithImage {...player}>Player: {player.firstName}</CardWithImage>
+                    <CardWithImage fetchPlayers={fetchPlayers} {...player}>Player: {player.firstName}</CardWithImage>
                 </WrapItem>
             ))}
          </Wrap>

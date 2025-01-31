@@ -97,10 +97,10 @@ public class PlayerService {
             throw new RequestPropertyIsNotValid("Valid team is required");
         }
 
-        boolean checked = Objects.equals(requestObject.termsAccepted(), "on");
 
 
-        if(!checked){
+
+        if(!requestObject.termsAccepted()){
             throw new RequestPropertyIsNotValid("Needs to be checked so terms are agreed to");
         }
 

@@ -10,10 +10,13 @@ import {
     Text,
     Stack,
     Button,
-    useColorModeValue, Tag,
+    useColorModeValue,
+    Tag,
 } from '@chakra-ui/react'
 
-export default function CardWithImage({id, firstName,lastName,email, age, phoneNumber, dateOfBirth, gender, team}) {
+import DeleteAlertDialog from "./AlertDialog.jsx";
+
+export default function CardWithImage({fetchPlayers, id, firstName,lastName,email, age, phoneNumber, dateOfBirth, gender, team}) {
 
     let genderForAPICall;
 
@@ -41,17 +44,12 @@ export default function CardWithImage({id, firstName,lastName,email, age, phoneN
         genderStrings = "";
     }
 
-
-
-
-
-
     return (
         <Center py={6}>
             <Box
                 maxW={'300px'}
                 minW={'300px'}
-                minH={"500px"}
+                minH={"550px"}
                 w={'full'}
                 bg={useColorModeValue('white', 'gray.800')}
                 boxShadow={'2xl'}
@@ -92,6 +90,10 @@ export default function CardWithImage({id, firstName,lastName,email, age, phoneN
                         <Text color={'gray.500'}>{team}</Text>
                     </Stack>
 
+                    <center>
+                        <Button onClick={""} m={4}>Update Player Information</Button>
+                        <DeleteAlertDialog id={id} fetchPlayers={fetchPlayers} firstName={firstName} />
+                    </center>
                 </Box>
             </Box>
         </Center>

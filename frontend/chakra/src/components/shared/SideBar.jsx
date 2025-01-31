@@ -32,9 +32,6 @@ import {
     FiChevronDown,
 } from 'react-icons/fi';
 
-
-
-
 const LinkItems = [
     { name: 'Home', icon: FiHome },
     { name: 'Trending', icon: FiTrendingUp },
