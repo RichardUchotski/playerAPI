@@ -79,7 +79,7 @@ class PlayerControllerTest {
         String email = "e@e.com";
         Gender gender = Gender.valueOf("MALE");
         String team = "Glasgow Korfball Club";
-        String termsAccepted = "on";
+        boolean termsAccepted = true;
 
 
 
@@ -103,7 +103,7 @@ class PlayerControllerTest {
         String email = "e@e.com";
         Gender gender = Gender.valueOf("MALE");
         String team = "Glasgow Korfball Club";
-        String termsAccepted = "on";
+        boolean termsAccepted = true;
 
 
 

@@ -19,7 +19,7 @@ public class CreatePlayer {
         String firstName = Character.toUpperCase(email.charAt(0)) + email.substring(1,email.indexOf("."));
         String secondName = Character.toUpperCase(email.charAt(email.indexOf(".")+1)) + email.substring(email.indexOf(".")+2, email.indexOf("@"));
 
-        int randYear = random.nextInt(1950,2011);
+        int randYear = random.nextInt(1950,2006);
         int randMonth = random.nextInt(1,13);
         int randDay = random.nextInt(1,28);
 
