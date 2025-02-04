@@ -58,7 +58,7 @@ jobs:
       - name: Update Dockerrun.aws.json with New Tag
         run: |
           echo "Before updating tag"
-          cat ../Dockerrun.aws.json
+          cat ../../Dockerrun.aws.json
           sed -i -E 's_(rsmithuchot1/playerapi-chakra:)([^"]*)_\1'${{steps.build-number.outputs.BUILD_NUMBER}}'_' ../../Dockerrun.aws.json
           echo "After updating tag"
           cat ../../Dockerrun.aws.json
