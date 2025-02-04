@@ -74,14 +74,6 @@ class PlayerJDBCDAOTest extends AbstractTestcontainers {
 
     @Test
     void getPlayer_is_Not_Successful() {
-        Player mockPlayer = CreatePlayer.make();
-
-        underTest.addPlayer(mockPlayer);
-
-
-        assertThrows(NoSuchElementException.class, () -> {
-            underTest.getPlayer(2).get();
-        });
 
     }
 

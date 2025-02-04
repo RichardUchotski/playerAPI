@@ -83,7 +83,7 @@ class PlayerServiceTest {
             newPlayer.getEmail(),
             newPlayer.getGender().name(),
             newPlayer.getTeam(),
-            "on"
+            true
         );
 
 
@@ -108,7 +108,7 @@ class PlayerServiceTest {
                 newPlayer.getEmail(),
                 newPlayer.getGender().name(),
                 newPlayer.getTeam(),
-                "on"
+                true
         );
 
         when(playerDAO.existsPlayerByEmail(request.email())).thenReturn(true);
@@ -131,7 +131,7 @@ class PlayerServiceTest {
                 newPlayer.getEmail(),
                 newPlayer.getGender().name(),
                 newPlayer.getTeam(),
-                "on"
+                true
         );
 
         Exception exception = assertThrows(RequestPropertyIsNotValid.class, () -> playerService.addPlayer(request));
@@ -156,7 +156,7 @@ class PlayerServiceTest {
                 existingPlayer.getEmail(),
                 existingPlayer.getGender().name(),
                 existingPlayer.getTeam(),
-                "on"
+                true
         );
 
         when(playerDAO.getPlayer(id)).thenReturn(Optional.of(existingPlayer));
@@ -182,7 +182,7 @@ class PlayerServiceTest {
                 existingPlayer.getEmail(),
                 existingPlayer.getGender().name(),
                 existingPlayer.getTeam(),
-                "on"
+                true
         );
 
         when(playerDAO.getPlayer(id)).thenReturn(Optional.of(existingPlayer));

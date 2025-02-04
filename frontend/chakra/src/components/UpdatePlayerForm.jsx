@@ -1,8 +1,8 @@
 import { Formik, Form, useField } from 'formik';
 import * as Yup from 'yup';
-import {Alert, AlertIcon, Box, Button, Flex, FormLabel, Input, Select, Stack} from "@chakra-ui/react";
+import {Alert, AlertIcon, Box, Button, FormLabel, Input, Select, Stack} from "@chakra-ui/react";
 import TEAM_DATA from "../data/teamdata.json";
-import { updateCustomer} from "../services/cleint.js";
+import { updatePlayer} from "../services/cleint.js";
 import {errorNotification, successNotification} from "../services/notification.js";
 
 const team_data = TEAM_DATA.sort((a, b) => a.teamName.localeCompare(b.teamName));
@@ -44,19 +44,19 @@ const MySelect = ({ label, ...props }) => {
     );
 };
 
-const UpdateForm = ({fetchPlayers}) => {
+const UpdateForm = ({playerId, fetchPlayers, ...rest}) => {
     return (
         <>
             <Formik
                 initialValues={{
-                    firstName: '',
-                    lastName: '',
-                    age: '',
-                    dateOfBirth: '',
-                    phoneNumber: '',
-                    email: '',
-                    gender: '',
-                    team: '',
+                    firstName: rest.firstName,
+                    lastName: rest.lastName,
+                    age: rest.age,
+                    dateOfBirth: rest.dateOfBirth,
+                    phoneNumber: rest.phoneNumber,
+                    email: rest.email,
+                    gender: rest.gender,
+                    team: rest.team,
                 }}
                 validationSchema={Yup.object({
                     firstName: Yup.string()
@@ -97,7 +97,7 @@ const UpdateForm = ({fetchPlayers}) => {
                 onSubmit={(values, { setSubmitting }) => {
                     values.age = new Date().getFullYear() - new Date(values.dateOfBirth).getFullYear();
                     setSubmitting(true);
-                    updateCustomer((values)).then(res => {
+                    updatePlayer(playerId, values).then(res => {
                         console.log(res)
                         successNotification(
                             "Player updated",

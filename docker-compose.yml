@@ -28,6 +28,21 @@ services:
     restart: unless-stopped
 
 
+  chakra-frontend:
+    container_name: chakra-frontend
+    image: rsmithuchot1/playerapi-chakra
+    build:
+      context: frontend/chakra
+      args:
+        api_base_url: http://localhost:8090
+    ports:
+      - "3000:5173"
+    depends_on:
+      - player-api
+    restart: unless-stopped
+
+
+
 networks:
   network:
     driver: bridge
