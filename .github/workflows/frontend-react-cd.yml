@@ -6,14 +6,14 @@ on:
     branches:
       - main
     paths:
-      - frontend/**
+      - frontend/chakra/**
       - .github/workflows/frontend-react-cd.yml
 
 permissions: write-all
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ./frontend/chakra
@@ -54,6 +54,8 @@ jobs:
           context: ./frontend/chakra
           file: ./frontend/chakra/Dockerfile
           tags: rsmithuchot1/playerapi-chakra:${{steps.build-number.outputs.BUILD_NUMBER}}
+          build-args: |
+            api_base_url=http://player-api-env.eba-qu2zxaus.eu-west-2.elasticbeanstalk.com:8080
 
       - name: Update Dockerrun.aws.json with New Tag
         run: |
