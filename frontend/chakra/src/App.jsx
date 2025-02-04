@@ -8,6 +8,9 @@ import {errorNotification} from "./services/notification.js";
 
 function App() {
 
+    console.log("VITE_API_BASE_URL:", import.meta.env.VITE_API_BASE_URL);
+
+
     const [players,setPlayers] = useState([]);
     const [loading, setLoading] = useState(false);
     const [err, setError] = useState("");
@@ -15,11 +18,17 @@ function App() {
     const fetchPlayers = () => {
         setLoading(true);
         setTimeout(() => getCustomers().then(res => {
-            console.log(res);
             setPlayers(res.data);
-
         }).catch(error => {
-                console.log(error)
+                if (error.response) {
+                    console.error("Error Data:", error.response.data);
+                    console.error("Status Code:", error.response.status);
+                    console.error("Headers:", error.response.headers);
+                } else if (err.request) {
+                    console.error("No response received:", error.request);
+                } else {
+                    console.error("Axios error:", error.message);
+                }
                 setError(error.response.data.message);
                 errorNotification(error.code, error.response.data.message);
         }

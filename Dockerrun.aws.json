@@ -8,7 +8,7 @@
       "memory" : 512,
       "portMappings": [
         {
-          "hostPort": 80,
+          "hostPort": 8080,
           "containerPort" : 8080
         }
       ],
@@ -16,6 +16,18 @@
         {
           "name" : "SPRING_DATASOURCE_URL",
           "value" : "jdbc:postgresql://awseb-e-ttuaue2shg-stack-awsebrdsdatabase-pe4hi0stm6nx.cr4cmu4o6fsx.eu-west-2.rds.amazonaws.com/korfball"
+        }
+      ]
+    },
+    {
+      "name" : "playerapi-chakra",
+      "image" : "rsmithuchot1/playerapi-chakra:latest",
+      "essential"  : true,
+      "memory" : 256,
+      "portMappings": [
+        {
+          "hostPort": 80,
+          "containerPort" : 5173
         }
       ]
     }
