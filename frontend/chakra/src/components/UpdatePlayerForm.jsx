@@ -44,7 +44,7 @@ const MySelect = ({ label, ...props }) => {
     );
 };
 
-const UpdateForm = ({playerId, fetchPlayers, ...rest}) => {
+const UpdateForm = ({fetchPlayers, ...rest}) => {
     return (
         <>
             <Formik
@@ -98,9 +98,9 @@ const UpdateForm = ({playerId, fetchPlayers, ...rest}) => {
                     values.age = new Date().getFullYear() - new Date(values.dateOfBirth).getFullYear();
                     setSubmitting(true);
 
-                    console.log(playerId);
+                    console.log(rest.id);
 
-                    updatePlayer(playerId, values).then(res => {
+                    updatePlayer(rest.id, values).then(res => {
                         console.log(res)
                         successNotification(
                             "Player updated",
