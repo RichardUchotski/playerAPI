@@ -9,8 +9,7 @@ on:
       - main
     paths:
       - backend/**
-      - .github/workflows/*
-      - frontend/**
+      - .github/workflows/**
 
 permissions: write-all
 
