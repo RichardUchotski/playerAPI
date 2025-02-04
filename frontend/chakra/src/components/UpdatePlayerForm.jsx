@@ -97,8 +97,9 @@ const UpdateForm = ({playerId, fetchPlayers, ...rest}) => {
                 onSubmit={(values, { setSubmitting }) => {
                     values.age = new Date().getFullYear() - new Date(values.dateOfBirth).getFullYear();
                     setSubmitting(true);
-                    alert(values);
-                    alert(JSON.stringify(values))
+
+                    console.log(playerId);
+
                     updatePlayer(playerId, values).then(res => {
                         console.log(res)
                         successNotification(
