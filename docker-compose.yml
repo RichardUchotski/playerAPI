@@ -34,7 +34,7 @@ services:
     build:
       context: frontend/chakra
       args:
-        api_base_url: http://localhost:8090
+        api_base_url: "http://localhost:8090"
     ports:
       - "3000:5173"
     depends_on:
