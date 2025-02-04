@@ -3,7 +3,7 @@
   "containerDefinitions": [
     {
       "name" : "player-api",
-      "image" : "rsmithuchot1/player-api:20.01.2025.16.30.23",
+      "image" : "rsmithuchot1/player-api:04.02.2025.15.17.00",
       "essential"  : true,
       "memory" : 512,
       "portMappings": [
