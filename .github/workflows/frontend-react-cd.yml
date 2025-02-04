@@ -7,7 +7,7 @@ on:
       - main
     paths:
       - frontend/**
-      - .github/workflows/**
+      - .github/workflows/frontend-react-cd.yml
 
 permissions: write-all
 
@@ -34,7 +34,7 @@ jobs:
         with:
           node-version: 22
           cache: 'npm'
-          cache-dependency-path: package-lock.json
+          cache-dependency-path: ./package-lock.json
 
       - name: Generate a build number
         id: build-number

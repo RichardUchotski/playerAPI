@@ -9,7 +9,7 @@ on:
       - main
     paths:
       - backend/**
-      - .github/workflows/**
+      - .github/workflows/backend-ci.yml
 
 permissions: write-all
 
