@@ -21,7 +21,7 @@
     },
     {
       "name" : "playerapi-chakra",
-      "image" : "rsmithuchot1/playerapi-chakra:latest",
+      "image" : "rsmithuchot1/playerapi-chakra:04.02.2025.18.24.28",
       "essential"  : true,
       "memory" : 256,
       "portMappings": [
