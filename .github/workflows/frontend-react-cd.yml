@@ -51,6 +51,8 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
+          context: ./frontend/chakra
+          file: ./frontend/chakra/Dockerfile
           tags: rsmithuchot1/playerapi-chakra:${{steps.build-number.outputs.BUILD_NUMBER}}
 
       - name: Update Dockerrun.aws.json with New Tag
