@@ -7,7 +7,7 @@ public record PlayerRequestObject(
         String dateOfBirth,
         String phoneNumber,
         String email,
-        String gender,
+        String password, String gender,
         String team,
         boolean termsAccepted
 ) {

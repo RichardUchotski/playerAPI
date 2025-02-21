@@ -11,4 +11,5 @@ public interface PlayerDAO {
     public void deletePlayer(int id);
     public void deleteAllPlayers();
     public boolean existsPlayerByEmail(String email);
+    public Optional<Player> getPlayerByEmail(String email);
 }

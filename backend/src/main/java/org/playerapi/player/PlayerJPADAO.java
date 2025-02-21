@@ -52,4 +52,9 @@ public class PlayerJPADAO implements PlayerDAO{
     public boolean existsPlayerByEmail(String email) {
         return playerJPARepository.existsByEmail(email);
     }
+
+    @Override
+    public Optional<Player> getPlayerByEmail(String email) {
+        return playerJPARepository.findByEmail(email);
+    }
 }
