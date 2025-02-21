@@ -11,7 +11,6 @@ import org.playerapi.player.PlayerRowMapper;
 import org.playerapi.utility.CreatePlayer;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertThrows;
@@ -38,7 +37,7 @@ class PlayerJDBCDAOTest extends AbstractTestcontainers {
         // what we are doing is adding the players to the database, and then
         //
         for(int i=0; i<10; i++){
-            underTest.addPlayer(CreatePlayer.make());
+            underTest.addPlayer(CreatePlayer.makePlayer());
         }
 
         List<Player> actual = underTest.getPlayers();
@@ -53,7 +52,7 @@ class PlayerJDBCDAOTest extends AbstractTestcontainers {
 
     @Test
     void getPlayer_isSuccessful() {
-        Player mockPlayer = CreatePlayer.make();
+        Player mockPlayer = CreatePlayer.makePlayer();
         String firstName = mockPlayer.getFirstName();
         String lastName = mockPlayer.getLastName();
         int age = mockPlayer.getAge();
@@ -79,7 +78,7 @@ class PlayerJDBCDAOTest extends AbstractTestcontainers {
 
     @Test
     void addPlayer() {
-        Player mockPlayer = CreatePlayer.make();
+        Player mockPlayer = CreatePlayer.makePlayer();
         String firstName = mockPlayer.getFirstName();
         String lastName = mockPlayer.getLastName();
         int age = mockPlayer.getAge();

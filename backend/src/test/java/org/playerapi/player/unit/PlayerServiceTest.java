@@ -1,10 +1,10 @@
 package org.playerapi.player.unit;
 
-import jakarta.persistence.Query;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.playerapi.exceptions.*;
 import org.playerapi.player.Player;
@@ -14,6 +14,7 @@ import org.playerapi.player.PlayerRequestObject;
 import jakarta.persistence.EntityManager;
 import org.playerapi.player.PlayerService;
 import org.playerapi.utility.CreatePlayer;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,14 +31,19 @@ class PlayerServiceTest {
     @Mock
     private EntityManager entityManager;
 
+    @Mock
+    private PasswordEncoder passwordEncoder;
+
+
     @InjectMocks
     private PlayerService playerService;
+
 
     @Test
     void getPlayers_returns_all_players() {
         List<Player> mockPlayers = List.of(
-                CreatePlayer.make(),
-                CreatePlayer.make()
+                CreatePlayer.makePlayer(),
+                CreatePlayer.makePlayer()
         );
 
         when(playerDAO.getPlayers()).thenReturn(mockPlayers);
@@ -50,7 +56,7 @@ class PlayerServiceTest {
 
     @Test
     void getPlayer_returns_player_successfully() {
-        Player mockPlayer =  CreatePlayer.make();
+        Player mockPlayer =  CreatePlayer.makePlayer();
 
         when(playerDAO.getPlayer(1)).thenReturn(Optional.of(mockPlayer));
 
@@ -72,7 +78,10 @@ class PlayerServiceTest {
 
     @Test
     void addPlayer_successfully_creates_new_player() {
-        Player newPlayer = CreatePlayer.make();
+
+        Mockito.when(passwordEncoder.encode(Mockito.anyString())).thenReturn("hashed-password");
+
+        Player newPlayer = CreatePlayer.makePlayer();
 
         PlayerRequestObject request = new PlayerRequestObject(
             newPlayer.getFirstName(),
@@ -81,6 +90,7 @@ class PlayerServiceTest {
             newPlayer.getDateOfBirth().toString(),
             newPlayer.getPhoneNumber(),
             newPlayer.getEmail(),
+            newPlayer.getPassword(),
             newPlayer.getGender().name(),
             newPlayer.getTeam(),
             true
@@ -97,7 +107,7 @@ class PlayerServiceTest {
 
     @Test
     void addPlayer_throws_exception_when_email_already_exists() {
-        Player newPlayer = CreatePlayer.make();
+        Player newPlayer = CreatePlayer.makePlayer();
 
         PlayerRequestObject request = new PlayerRequestObject(
                 newPlayer.getFirstName(),
@@ -106,7 +116,7 @@ class PlayerServiceTest {
                 newPlayer.getDateOfBirth().toString(),
                 newPlayer.getPhoneNumber(),
                 newPlayer.getEmail(),
-                newPlayer.getGender().name(),
+                "password", newPlayer.getGender().name(),
                 newPlayer.getTeam(),
                 true
         );
@@ -121,7 +131,7 @@ class PlayerServiceTest {
 
     @Test
     void addPlayer_throws_exception_when_name_is_invalid() {
-        Player newPlayer = CreatePlayer.make();
+        Player newPlayer = CreatePlayer.makePlayer();
         PlayerRequestObject request = new PlayerRequestObject(
                 "",
                 newPlayer.getLastName(),
@@ -129,7 +139,7 @@ class PlayerServiceTest {
                 newPlayer.getDateOfBirth().toString(),
                 newPlayer.getPhoneNumber(),
                 newPlayer.getEmail(),
-                newPlayer.getGender().name(),
+                "password", newPlayer.getGender().name(),
                 newPlayer.getTeam(),
                 true
         );
@@ -143,7 +153,7 @@ class PlayerServiceTest {
     void updatePlayer_successfully_updates_existing_player() {
 
         int id = 1;
-        Player existingPlayer = CreatePlayer.make();
+        Player existingPlayer = CreatePlayer.makePlayer();
         existingPlayer.setId(id);
         existingPlayer.setAge(25);
 
@@ -154,7 +164,7 @@ class PlayerServiceTest {
                 existingPlayer.getDateOfBirth().toString(),
                 existingPlayer.getPhoneNumber(),
                 existingPlayer.getEmail(),
-                existingPlayer.getGender().name(),
+                "password", existingPlayer.getGender().name(),
                 existingPlayer.getTeam(),
                 true
         );
@@ -168,35 +178,59 @@ class PlayerServiceTest {
     }
 
     @Test
-    void updatePlayer_throws_exception_when_no_changes_made() {
+    void updatePlayer_throws_exception_when_no_changes_made_is_null() {
         int id = 1;
-        Player existingPlayer = CreatePlayer.make();
+        Player existingPlayer = CreatePlayer.makePlayer();
         existingPlayer.setId(id);
 
-        PlayerRequestObject updateRequest = new PlayerRequestObject(
-                existingPlayer.getFirstName(),
-                existingPlayer.getLastName(),
-                existingPlayer.getAge(),
-                existingPlayer.getDateOfBirth().toString(),
-                existingPlayer.getPhoneNumber(),
-                existingPlayer.getEmail(),
-                existingPlayer.getGender().name(),
-                existingPlayer.getTeam(),
-                true
-        );
+        PlayerRequestObject updateRequest =  null;
 
         when(playerDAO.getPlayer(id)).thenReturn(Optional.of(existingPlayer));
 
-        Exception exception = assertThrows(NoChangesMadeOnUpdateException.class, () -> playerService.updatePlayer(updateRequest, id));
+        Exception exception = assertThrows(RequestPropertyIsNotValid.class, () -> playerService.updatePlayer(updateRequest, id));
 
-        assertEquals("No Update Required as no changes made on update", exception.getMessage());
+        assertEquals("All fields are required, fields are currently empty", exception.getMessage());
         verify(playerDAO, never()).updatePlayer(any());
+    }
+
+    @Test
+    void updatePlayer_throws_exception_when_no_changes_made(){
+        Mockito.when(passwordEncoder.encode(Mockito.anyString())).thenReturn("hashed-password");
+
+        Player newPlayer = CreatePlayer.makePlayer();
+
+
+        PlayerRequestObject request = new PlayerRequestObject(
+                newPlayer.getFirstName(),
+                newPlayer.getLastName(),
+                newPlayer.getAge(),
+                newPlayer.getDateOfBirth().toString(),
+                newPlayer.getPhoneNumber(),
+                newPlayer.getEmail(),
+                newPlayer.getPassword(),
+                newPlayer.getGender().name(),
+                newPlayer.getTeam(),
+                true
+        );
+
+
+        when(playerDAO.existsPlayerByEmail(request.email())).thenReturn(false);
+
+        Player result = playerService.addPlayer(request);
+        result.setId(1);
+
+        playerService.updatePlayer(request,1);
+
+
+
+
+
     }
 
     @Test
     void deletePlayer_successfully_deletes_player() {
         int id = 1;
-        Player existingPlayer = CreatePlayer.make();
+        Player existingPlayer = CreatePlayer.makePlayer();
         existingPlayer.setId(id);
 
         when(playerDAO.getPlayer(id)).thenReturn(Optional.of(existingPlayer));

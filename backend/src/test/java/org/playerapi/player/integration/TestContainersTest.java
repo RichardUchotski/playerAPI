@@ -10,5 +10,6 @@ public class TestContainersTest extends AbstractTestcontainers {
     void canStartPostgreSQLContainer() {
         assertThat(postgreSQLContainer.isCreated()).isTrue();
         assertThat(postgreSQLContainer.isRunning()).isTrue();
+
     }
 }

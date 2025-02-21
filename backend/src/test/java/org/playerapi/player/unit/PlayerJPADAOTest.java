@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.playerapi.player.Player;
 import org.playerapi.player.PlayerJPARepository;
@@ -30,8 +29,8 @@ class PlayerJPADAOTest {
     void getPlayers_returns_all_players() {
         // Arrange
         List<Player> mockPlayers = List.of(
-                CreatePlayer.make(),
-                CreatePlayer.make()
+                CreatePlayer.makePlayer(),
+                CreatePlayer.makePlayer()
         );
         when(playerJPARepository.findAll()).thenReturn(mockPlayers);
 
@@ -47,7 +46,7 @@ class PlayerJPADAOTest {
     @Test
     void getPlayer_returns_player_when_found() {
         // Arrange
-        Player mockPlayer = CreatePlayer.make();
+        Player mockPlayer = CreatePlayer.makePlayer();
         when(playerJPARepository.findById(1)).thenReturn(Optional.of(mockPlayer));
 
         // Act
@@ -75,7 +74,7 @@ class PlayerJPADAOTest {
     @Test
     void addPlayer_saves_and_returns_player() {
         // Arrange
-        Player mockPlayer = CreatePlayer.make();
+        Player mockPlayer = CreatePlayer.makePlayer();
 
         // Act
         Player result = playerJPADAO.addPlayer(mockPlayer);
@@ -88,7 +87,7 @@ class PlayerJPADAOTest {
     @Test
     void updatePlayer_saves_updated_player() {
         // Arrange
-        Player mockPlayer = CreatePlayer.make();
+        Player mockPlayer = CreatePlayer.makePlayer();
 
         // Act
         playerJPADAO.updatePlayer(mockPlayer);
@@ -100,7 +99,7 @@ class PlayerJPADAOTest {
     @Test
     void deletePlayer_deletes_existing_player() {
         // Arrange
-        Player mockPlayer = CreatePlayer.make();
+        Player mockPlayer = CreatePlayer.makePlayer();
         when(playerJPARepository.findById(1)).thenReturn(Optional.of(mockPlayer));
 
         // Act

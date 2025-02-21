@@ -1,20 +1,18 @@
 package org.playerapi.player;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import org.playerapi.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,11 +22,14 @@ public class PlayerService {
     @PersistenceContext
     private EntityManager entityManager;
 
-    PlayerDAO playerDAO;
+    private final PlayerDAO playerDAO;
+    private final PasswordEncoder passwordEncoder;
+
 
     @Autowired
-    public PlayerService(@Qualifier("jdbc") PlayerDAO playerDAO) {
+    public PlayerService(@Qualifier("jdbc") PlayerDAO playerDAO, PasswordEncoder passwordEncoder) {
         this.playerDAO = playerDAO;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<Player> getPlayers() {
@@ -53,12 +54,10 @@ public class PlayerService {
             throw new RequestPropertyIsNotValid("Valid first name is required");
         }
 
-
         String lastName = requestObject.lastName();
         if(!isValidName(lastName)) {
             throw new RequestPropertyIsNotValid("Valid last name is required");
         }
-
 
         String email = requestObject.email();
         if(!isValidEmail(email)) {
@@ -97,7 +96,13 @@ public class PlayerService {
             throw new RequestPropertyIsNotValid("Valid team is required");
         }
 
+        String password = requestObject.password();
+        if(!isValidPassword(password)){
+            throw new RequestPropertyIsNotValid("Valid password is required");
+        }
 
+        System.out.println(password);
+        System.out.println(passwordEncoder.encode(password));
 
 
         if(!requestObject.termsAccepted()){
@@ -105,16 +110,15 @@ public class PlayerService {
         }
 
 
-        Player newPlayerToAdd = new Player(firstName,lastName,age,dateOfBirth,phoneNumber,email,gender,team, true);
+        Player newPlayerToAdd = new Player(firstName,lastName,age,dateOfBirth,phoneNumber,email, passwordEncoder.encode(password), gender,team, true);
         playerDAO.addPlayer(newPlayerToAdd);
         return newPlayerToAdd;
     }
 
-
-
     public Player updatePlayer(PlayerRequestObject requestObject, int id) {
 
         Player playerToUpdate = getPlayer(id);
+
 
         if(playerToUpdate == null) {
             throw new PlayerByIdNotInDatabaseException("Player with id " + id + " does not exist by ID");
@@ -125,6 +129,7 @@ public class PlayerService {
                         requestObject.lastName() == null &&
                         requestObject.age() == 0 &&
                         requestObject.email() == null &&
+                        requestObject.password() == null &&
                         requestObject.dateOfBirth() == null &&
                         requestObject.phoneNumber() == null &&
                         requestObject.gender() == null && requestObject.team() == null
@@ -152,6 +157,7 @@ public class PlayerService {
             isUpdate = true;
         }
 
+
         LocalDate dateOfBirth = getDateOfBirth(requestObject);
         if(isValidDateOBirth(dateOfBirth) && !playerToUpdate.getDateOfBirth().equals(dateOfBirth)) {
             playerToUpdate.setDateOfBirth(dateOfBirth);
@@ -161,6 +167,11 @@ public class PlayerService {
 
         if(isValidEmail(requestObject.email()) && !playerToUpdate.getEmail().equals(requestObject.email())) {
             playerToUpdate.setEmail(requestObject.email());
+            isUpdate = true;
+        }
+
+        if(isValidPassword(requestObject.password()) && !playerToUpdate.getPassword().equals(passwordEncoder.encode(requestObject.password()))) {
+            playerToUpdate.setPassword(passwordEncoder.encode(requestObject.password()));
             isUpdate = true;
         }
 
@@ -177,17 +188,21 @@ public class PlayerService {
         boolean changeGender;
         Gender newGender = null;
 
-        try{
-            newGender = Gender.valueOf(requestObject.gender());
-            changeGender = true;
-        } catch (IllegalArgumentException e){
-            changeGender = false;
+        if(requestObject.gender() != null) {
+            try{
+                newGender = Gender.valueOf(requestObject.gender());
+                changeGender = true;
+            } catch (IllegalArgumentException e){
+                changeGender = false;
+            }
+
+            if(changeGender && !playerToUpdate.getGender().equals(newGender)) {
+                playerToUpdate.setGender(newGender);
+                isUpdate = true;
+            }
         }
 
-        if(changeGender && !playerToUpdate.getGender().equals(newGender)) {
-            playerToUpdate.setGender(newGender);
-            isUpdate = true;
-        }
+
 
 
         if(!isUpdate) {
@@ -240,6 +255,10 @@ public class PlayerService {
     }
 
     private boolean isValidDateOBirth(LocalDate date) {
+        if(date == null){
+            return false;
+        }
+
         LocalDate today = LocalDate.now();
 
         if(date.isAfter(today)) {
@@ -270,8 +289,18 @@ public class PlayerService {
     }
 
     private static LocalDate getDateOfBirth(PlayerRequestObject requestObject) {
-        String[] dateString = requestObject.dateOfBirth().split("-");
-        return LocalDate.of(Integer.parseInt(dateString[0]), Integer.parseInt(dateString[1]), Integer.parseInt(dateString[2]));
+        if(requestObject.dateOfBirth() != null) {
+            String[] dateString = requestObject.dateOfBirth().split("-");
+            return LocalDate.of(Integer.parseInt(dateString[0]), Integer.parseInt(dateString[1]), Integer.parseInt(dateString[2]));
+        }
+
+        return null;
+
+    }
+
+    private static boolean isValidPassword(String password){
+        final String BCRYPT_PATTERN = "^\\$2[ayb]\\$\\d{2}\\$[./A-Za-z0-9]{53}$";
+        return password != null && !password.isBlank() && !password.matches(BCRYPT_PATTERN);
     }
 
 }

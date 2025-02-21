@@ -9,32 +9,36 @@ import org.playerapi.utility.CreatePlayer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+
 import org.springframework.context.ApplicationContext;
+
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class PlayerRepositoryTest  extends AbstractTestcontainers {
+class PlayerJPARepositoryTest extends AbstractTestcontainers {
 
     @Autowired
-    PlayerJPARepository underTest;
+    private PlayerJPARepository playerJPARepository;
 
-//    @Autowired
-//    private ApplicationContext applicationContext;
+    @Autowired
+    private ApplicationContext applicationContext;
 
     @BeforeEach
     void setUp() {
-        underTest.deleteAll();
-//        System.out.println(applicationContext.getBeanDefinitionCount());
+        System.out.println(applicationContext.getBeanDefinitionCount());
     }
 
     @Test
-    void existsCustomerByEmail(){
-        Player player = CreatePlayer.make();
-        underTest.save(player);
-        assertThat(underTest.existsByEmail(player.getEmail())).isTrue();
+    void existsByEmail() {
+        Player player  = CreatePlayer.makePlayer();
+        playerJPARepository.save(player);
+        boolean doesExit = playerJPARepository.existsByEmail(player.getEmail());
+        assertThat(doesExit).isTrue();
     }
 
-
+    @Test
+    void findByEmail() {
+    }
 }

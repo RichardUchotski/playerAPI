@@ -6,7 +6,11 @@ CREATE TABLE player(
     date_of_birth DATE NOT NULL,
     phone_number TEXT NOT NULL,
     email TEXT NOT NULL,
+    password TEXT NOT NULL,
     gender TEXT NOT NULL,
     team TEXT NOT NULL,
     terms_accepted BOOLEAN NOT NULL
-)
+);
+
+ALTER TABLE player
+    ADD CONSTRAINT player_email_unique UNIQUE (email);

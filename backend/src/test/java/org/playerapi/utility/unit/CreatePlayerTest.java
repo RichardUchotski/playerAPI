@@ -11,7 +11,7 @@ class CreatePlayerTest {
     @Test
     void make_creates_player_successfully() {
         // Act
-        Player player = CreatePlayer.make();
+        Player player = CreatePlayer.makePlayer();
 
         // Assert
         // Verify non-null values
